@@ -13,8 +13,8 @@ public class ModelManager implements IEngineObject {
     private List<VAO> vaos = new ArrayList<>();
     private List<Texture> textures = new ArrayList<>();
 
-    public VAO loadVAO(float[] positions, float[] textureCoordinates, int[] vertices) {
-        VAO vao = new VAO(positions, textureCoordinates, vertices);
+    public VAO loadVAO(String file) {
+        VAO vao = VAO.loadFromFile(file);
         vaos.add(vao);
         return vao;
     }

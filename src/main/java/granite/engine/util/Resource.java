@@ -13,6 +13,8 @@ public class Resource {
             case SHADER:
                 typeString = "shaders";
                 break;
+            case MODEL:
+                typeString = "models";
         }
         return Resource.class.getClassLoader().getResourceAsStream(typeString + "/" + name);
     }

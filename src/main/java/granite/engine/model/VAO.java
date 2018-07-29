@@ -1,10 +1,17 @@
 package granite.engine.model;
 
+import de.javagl.obj.Obj;
+import de.javagl.obj.ObjData;
+import de.javagl.obj.ObjReader;
 import granite.engine.core.IBindable;
 import granite.engine.core.IDestroyable;
-import granite.engine.util.Buffer;
+import granite.engine.util.Resource;
+import granite.engine.util.ResourceType;
 import org.lwjgl.opengl.*;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,36 +26,36 @@ public class VAO implements IBindable, IDestroyable {
     private int vertexCount = 0;
     private List<Integer> vbos = new ArrayList<>();
 
-    public VAO(float[] positions, float[] textureCoordinates, int[] indices) {
+    public VAO(FloatBuffer vertices, FloatBuffer textureCoordinates, FloatBuffer normals, IntBuffer indices, int vertexCount) {
         id = glGenVertexArrays();
-        storeDataInAttributeList(0, 3, positions);
+        storeDataInAttributeList(0, 3, vertices);
         storeDataInAttributeList(1, 2, textureCoordinates);
+        storeDataInAttributeList(2, 3, normals);
         bindIndicesBuffer(indices);
+        this.vertexCount = vertexCount;
     }
 
     public int getId() {
         return id;
     }
 
-    private void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data) {
+    private void storeDataInAttributeList(int attributeNumber, int coordinateSize, FloatBuffer data) {
         bind();
         int vboId = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboId);
-        glBufferData(GL_ARRAY_BUFFER, Buffer.createFloatBuffer(data), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
         glVertexAttribPointer(attributeNumber, coordinateSize, GL11.GL_FLOAT, false, 0, 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         vbos.add(vboId);
         unbind();
-        vertexCount = data.length;
     }
 
-    private void bindIndicesBuffer(int[] indices) {
+    private void bindIndicesBuffer(IntBuffer indices) {
         bind();
         int vboId = glGenBuffers();
         vbos.add(vboId);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId);
-        IntBuffer buffer = Buffer.createIntBuffer(indices);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
         unbind();
     }
 
@@ -72,5 +79,18 @@ public class VAO implements IBindable, IDestroyable {
             glDeleteBuffers(vbo);
         }
         glDeleteVertexArrays(getId());
+    }
+
+    public static VAO loadFromFile(String file) {
+        InputStream input = Resource.loadResource(ResourceType.MODEL, file);
+        try {
+            Obj obj = ObjReader.read(input);
+            return new VAO(ObjData.getVertices(obj), ObjData.getTexCoords(obj, 2), ObjData.getNormals(obj), ObjData.getFaceVertexIndices(obj), obj.getNumVertices());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("unable to read OBJ file");
+            System.exit(-1);
+            return null;
+        }
     }
 }

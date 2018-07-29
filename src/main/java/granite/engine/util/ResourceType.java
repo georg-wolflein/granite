@@ -1,5 +1,5 @@
 package granite.engine.util;
 
 public enum ResourceType {
-    SHADER, TEXTURE
+    SHADER, TEXTURE, MODEL
 }
