@@ -3,63 +3,42 @@ package granite.engine.entities;
 import granite.engine.Engine;
 import granite.engine.core.IEngineObject;
 import granite.engine.input.Input;
+import granite.engine.model.Model;
 import org.joml.Vector3f;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class Camera implements IEngineObject {
+public class Camera extends Object3D implements IEngineObject {
 
-    private Vector3f position = new Vector3f(0f, 0f, 0f);
-    private float pitch = 0, yaw = 0, roll = 0;
+
+    public Camera() {
+        super(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0));
+    }
 
     public Vector3f getPosition() {
         return position;
     }
 
     public float getPitch() {
-        return pitch;
+        return getRotation().x();
     }
 
     public float getYaw() {
-        return yaw;
+        return getRotation().y();
     }
 
     public float getRoll() {
-        return roll;
+        return getRotation().z();
     }
 
     @Override
-    public void attach() {
+    public void attach(Engine engine) {
 
     }
 
     @Override
-    public void update() {
-        Input input = Engine.getInstance().getInput();
-        if (input.isPressed(GLFW_KEY_W)) {
-            position.z -= .02f;
-        }
-        if (input.isPressed(GLFW_KEY_A)) {
-            position.x -= .02f;
-        }
-        if (input.isPressed(GLFW_KEY_S)) {
-            position.z += .02f;
-        }
-        if (input.isPressed(GLFW_KEY_D)) {
-            position.x += .02f;
-        }
-        if (input.isPressed(GLFW_KEY_UP)) {
-            pitch -= 1f;
-        }
-        if (input.isPressed(GLFW_KEY_DOWN)) {
-            pitch += 1f;
-        }
-        if (input.isPressed(GLFW_KEY_LEFT)) {
-            yaw -= 1f;
-        }
-        if (input.isPressed(GLFW_KEY_RIGHT)) {
-            yaw += 1f;
-        }
+    public void update(Engine engine) {
+
     }
 
     @Override

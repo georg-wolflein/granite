@@ -1,5 +1,6 @@
 package granite.engine.display;
 
+import granite.engine.Engine;
 import granite.engine.core.IEngineObject;
 import org.lwjgl.opengl.*;
 
@@ -45,12 +46,12 @@ public class DisplayManager implements IEngineObject {
     }
 
     @Override
-    public void attach() {
+    public void attach(Engine engine) {
         glfwShowWindow(getWindowId());
     }
 
     @Override
-    public void update() {
+    public void update(Engine engine) {
         glfwSwapBuffers(getWindowId());
         glfwPollEvents();
     }

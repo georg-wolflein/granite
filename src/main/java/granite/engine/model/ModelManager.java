@@ -1,5 +1,6 @@
 package granite.engine.model;
 
+import granite.engine.Engine;
 import granite.engine.core.IDestroyable;
 import granite.engine.core.IEngineObject;
 
@@ -53,12 +54,12 @@ public class ModelManager implements IEngineObject {
     }
 
     @Override
-    public void attach() {
+    public void attach(Engine engine) {
 
     }
 
     @Override
-    public void update() {
+    public void update(Engine engine) {
 
     }
 }

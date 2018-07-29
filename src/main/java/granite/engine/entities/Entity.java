@@ -3,26 +3,15 @@ package granite.engine.entities;
 import granite.engine.model.Model;
 import org.joml.Vector3f;
 
-public class Entity {
+public class Entity extends Object3D {
 
     private Model model;
-    private Vector3f position;
-    private Vector3f rotation;
     private float scale;
 
     public Entity(Model model, Vector3f position, Vector3f rotation, float scale) {
+        super(position, rotation);
         this.model = model;
-        this.position = position;
-        this.rotation = rotation;
         this.scale = scale;
-    }
-
-    public void move(Vector3f d) {
-        position.add(d);
-    }
-
-    public void rotate(Vector3f r) {
-        rotation.add(r);
     }
 
     public Model getModel() {
@@ -31,22 +20,6 @@ public class Entity {
 
     public void setModel(Model model) {
         this.model = model;
-    }
-
-    public Vector3f getPosition() {
-        return position;
-    }
-
-    public void setPosition(Vector3f position) {
-        this.position = position;
-    }
-
-    public Vector3f getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(Vector3f rotation) {
-        this.rotation = rotation;
     }
 
     public float getScale() {

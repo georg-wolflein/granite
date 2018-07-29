@@ -1,5 +1,7 @@
 package granite.engine.core;
 
+import granite.engine.Engine;
+
 public class TimeManager implements IEngineObject {
 
     private long lastTime;
@@ -15,14 +17,14 @@ public class TimeManager implements IEngineObject {
     }
 
     @Override
-    public void attach() {
+    public void attach(Engine engine) {
         lastTime = System.nanoTime();
         time = 0;
         delta = 1;
     }
 
     @Override
-    public void update() {
+    public void update(Engine engine) {
         long now = System.nanoTime();
         delta = (now - lastTime) / (double) Constants.NANOSECONDS_PER_SECOND;
         time += delta;

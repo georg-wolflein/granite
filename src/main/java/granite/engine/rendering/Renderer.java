@@ -22,11 +22,11 @@ public class Renderer implements IEngineObject {
     StaticShader staticShader;
 
     @Override
-    public void attach() {
+    public void attach(Engine engine) {
         //glClearColor(0f, 1f, 0f, 1f);
         glClear(GL_COLOR_BUFFER_BIT);
-        projectionMatrix = MathUtil.createProjectionMatrix(Engine.getInstance().getDisplayManager().getWidth(),
-                Engine.getInstance().getDisplayManager().getHeight(), FIELD_OF_VIEW, NEAR_PLANE, FAR_PLANE);
+        projectionMatrix = MathUtil.createProjectionMatrix(engine.getDisplayManager().getWidth(),
+                engine.getDisplayManager().getHeight(), FIELD_OF_VIEW, NEAR_PLANE, FAR_PLANE);
         staticShader = new StaticShader();
         staticShader.bind();
         staticShader.loadProjectionMatrix(projectionMatrix);
@@ -34,11 +34,11 @@ public class Renderer implements IEngineObject {
     }
 
     @Override
-    public void update() {
+    public void update(Engine engine) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         staticShader.bind();
-        staticShader.loadViewMatrix(Engine.getInstance().getCamera());
-        for (Entity entity : Engine.getInstance().getEntityManager().getEntities()) {
+        staticShader.loadViewMatrix(engine.getCamera());
+        for (Entity entity : engine.getEntityManager().getEntities()) {
             render(entity, staticShader);
         }
         staticShader.unbind();

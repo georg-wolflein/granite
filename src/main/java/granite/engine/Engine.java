@@ -9,12 +9,13 @@ import granite.engine.model.ModelManager;
 import granite.engine.rendering.Renderer;
 import org.lwjgl.glfw.*;
 
+import java.awt.font.ImageGraphicAttribute;
+
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Engine {
 
-    private static Engine instance;
     private TimeManager timeManager;
     private DisplayManager displayManager;
     private Input input;
@@ -22,15 +23,9 @@ public class Engine {
     private ModelManager modelManager;
     private EntityManager entityManager;
     private Camera camera;
+    private IGame game;
 
-    public static Engine getInstance() {
-        if (instance == null) {
-            instance = new Engine();
-        }
-        return instance;
-    }
-
-    private Engine() {
+    public Engine(IGame game) {
         GLFWErrorCallback.createPrint(System.err).set();
         if (!glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW");
@@ -43,26 +38,29 @@ public class Engine {
         renderer = new Renderer();
         entityManager = new EntityManager();
         camera = new Camera();
+        this.game = game;
         glEnable(GL_DEPTH_TEST);
     }
 
     public void start() {
-        getTimeManager().attach();
-        getDisplayManager().attach();
-        getInput().attach();
-        getModelManager().attach();
-        getRenderer().attach();
-        getEntityManager().attach();
-        getCamera().attach();
+        getTimeManager().attach(this);
+        getDisplayManager().attach(this);
+        getInput().attach(this);
+        getModelManager().attach(this);
+        getRenderer().attach(this);
+        getEntityManager().attach(this);
+        getCamera().attach(this);
+        game.attach(this);
 
         while (!getDisplayManager().isCloseRequested()) {
-            getTimeManager().update();
-            getDisplayManager().update();
-            getInput().update();
-            getModelManager().update();
-            getEntityManager().update();
-            getCamera().update();
-            getRenderer().update();
+            getTimeManager().update(this);
+            getDisplayManager().update(this);
+            getModelManager().update(this);
+            getEntityManager().update(this);
+            getCamera().update(this);
+            getRenderer().update(this);
+            game.update(this);
+            getInput().update(this);
             if (getInput().isPressed(GLFW_KEY_ESCAPE)) getDisplayManager().setCloseRequested(true);
         }
 
@@ -77,6 +75,7 @@ public class Engine {
         getEntityManager().destroy();
         getDisplayManager().destroy();
         getTimeManager().destroy();
+        game.destroy();
         glfwTerminate();
         glfwSetErrorCallback(null).free();
     }
