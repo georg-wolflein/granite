@@ -1,29 +1,21 @@
 package granite.engine.model;
 
-import de.javagl.obj.Obj;
-import de.javagl.obj.ObjData;
-import de.javagl.obj.ObjReader;
 import granite.engine.core.IBindable;
 import granite.engine.core.IDestroyable;
-import granite.engine.util.Resource;
-import granite.engine.util.ResourceType;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL11;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
 
 public class VAO implements IBindable, IDestroyable {
 
-    private int id;
-    private int vertexCount = 0;
+    private int id, vertexCount;
     private List<Integer> vbos = new ArrayList<>();
 
     public VAO(FloatBuffer vertices, FloatBuffer textureCoordinates, FloatBuffer normals, IntBuffer indices, int vertexCount) {
@@ -82,15 +74,6 @@ public class VAO implements IBindable, IDestroyable {
     }
 
     public static VAO loadFromFile(String file) {
-        InputStream input = Resource.loadResource(ResourceType.MODEL, file);
-        try {
-            Obj obj = ObjReader.read(input);
-            return new VAO(ObjData.getVertices(obj), ObjData.getTexCoords(obj, 2), ObjData.getNormals(obj), ObjData.getFaceVertexIndices(obj), obj.getNumVertices());
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("unable to read OBJ file");
-            System.exit(-1);
-            return null;
-        }
+        throw new RuntimeException();
     }
 }
