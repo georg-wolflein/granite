@@ -13,25 +13,30 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
 
-public class VAO implements IBindable, IDestroyable {
+public abstract class Mesh implements IBindable, IDestroyable {
 
     private int id, vertexCount;
     private List<Integer> vbos = new ArrayList<>();
+    private Material material;
 
-    public VAO(FloatBuffer vertices, FloatBuffer textureCoordinates, FloatBuffer normals, IntBuffer indices, int vertexCount) {
-        id = glGenVertexArrays();
-        storeDataInAttributeList(0, 3, vertices);
-        storeDataInAttributeList(1, 2, textureCoordinates);
-        storeDataInAttributeList(2, 3, normals);
-        bindIndicesBuffer(indices);
+    public Mesh(FloatBuffer vertices, FloatBuffer normals, IntBuffer indices, int vertexCount, Material material) {
+        this.id = glGenVertexArrays();
         this.vertexCount = vertexCount;
+        this.material = material;
+        storeDataInAttributeList(0, 3, vertices);
+        storeDataInAttributeList(1, 3, normals);
+        bindIndicesBuffer(indices);
     }
 
     public int getId() {
         return id;
     }
 
-    private void storeDataInAttributeList(int attributeNumber, int coordinateSize, FloatBuffer data) {
+    public Material getMaterial() {
+        return material;
+    }
+
+    protected void storeDataInAttributeList(int attributeNumber, int coordinateSize, FloatBuffer data) {
         bind();
         int vboId = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboId);
@@ -42,7 +47,7 @@ public class VAO implements IBindable, IDestroyable {
         unbind();
     }
 
-    private void bindIndicesBuffer(IntBuffer indices) {
+    protected void bindIndicesBuffer(IntBuffer indices) {
         bind();
         int vboId = glGenBuffers();
         vbos.add(vboId);
@@ -71,9 +76,5 @@ public class VAO implements IBindable, IDestroyable {
             glDeleteBuffers(vbo);
         }
         glDeleteVertexArrays(getId());
-    }
-
-    public static VAO loadFromFile(String file) {
-        throw new RuntimeException();
     }
 }

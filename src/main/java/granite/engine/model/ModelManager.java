@@ -1,56 +1,31 @@
 package granite.engine.model;
 
 import granite.engine.Engine;
-import granite.engine.core.IDestroyable;
 import granite.engine.core.IEngineObject;
+import granite.engine.core.Manager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelManager implements IEngineObject {
+public class ModelManager extends Manager<String, Model> implements IEngineObject {
 
     private List<Model> models = new ArrayList<>();
-    private List<VAO> vaos = new ArrayList<>();
-    private List<Texture> textures = new ArrayList<>();
-
-    public VAO loadVAO(String file) {
-        VAO vao = VAO.loadFromFile(file);
-        vaos.add(vao);
-        return vao;
-    }
-
-    public Texture loadTexture(String file) {
-        Texture texture = new Texture(file);
-        textures.add(texture);
-        return texture;
-    }
-
-    public Model addModel(VAO vao, Texture texture) {
-        Model model = new Model(vao, texture);
-        models.add(model);
-        return model;
-    }
-
-    public List<VAO> getVaos() {
-        return vaos;
-    }
-
-    public List<Texture> getTextures() {
-        return textures;
-    }
 
     public List<Model> getModels() {
         return models;
     }
 
+    public Model load(String name, String file) throws IOException {
+        Model model = new Model(name);
+        model.load(file);
+        add(model);
+        return model;
+    }
+
     @Override
-    public void destroy() {
-        for (IDestroyable vao : vaos) {
-            vao.destroy();
-        }
-        for (IDestroyable texture : textures) {
-            texture.destroy();
-        }
+    public String add(Model item) {
+        return add(item.getName(), item);
     }
 
     @Override

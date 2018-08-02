@@ -3,8 +3,6 @@ package granite.engine.entities;
 import granite.engine.Engine;
 import granite.engine.core.IEngineObject;
 import granite.engine.model.Model;
-import granite.engine.model.Texture;
-import granite.engine.model.VAO;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;

@@ -1,16 +1,20 @@
 package granite.engine.rendering;
 
+import com.mokiat.data.front.parser.MTLColor;
 import granite.engine.Engine;
 import granite.engine.core.IEngineObject;
 import granite.engine.entities.Entity;
+import granite.engine.model.Mesh;
 import granite.engine.model.Model;
-import granite.engine.shaders.StaticShader;
+import granite.engine.model.RawMesh;
+import granite.engine.shaders.StaticRawShader;
 import granite.engine.util.MathUtil;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 
 public class Renderer implements IEngineObject {
 
@@ -19,7 +23,7 @@ public class Renderer implements IEngineObject {
     private static final float FAR_PLANE = 1000;
 
     private Matrix4f projectionMatrix;
-    StaticShader staticShader;
+    StaticRawShader staticRawShader;
 
     @Override
     public void attach(Engine engine) {
@@ -27,46 +31,60 @@ public class Renderer implements IEngineObject {
         glClear(GL_COLOR_BUFFER_BIT);
         projectionMatrix = MathUtil.createProjectionMatrix(engine.getDisplayManager().getWidth(),
                 engine.getDisplayManager().getHeight(), FIELD_OF_VIEW, NEAR_PLANE, FAR_PLANE);
-        staticShader = new StaticShader();
-        staticShader.bind();
-        staticShader.loadProjectionMatrix(projectionMatrix);
-        staticShader.unbind();
+        staticRawShader = new StaticRawShader();
+        staticRawShader.bind();
+        staticRawShader.loadProjectionMatrix(projectionMatrix);
+        staticRawShader.unbind();
     }
 
     @Override
     public void update(Engine engine) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        staticShader.bind();
-        staticShader.loadViewMatrix(engine.getCamera());
+        staticRawShader.loadViewMatrix(engine.getCamera());
         for (Entity entity : engine.getEntityManager().getEntities()) {
-            render(entity, staticShader);
+            render(entity, staticRawShader);
         }
-        staticShader.unbind();
+        staticRawShader.unbind();
     }
 
-    public void render(Entity entity, StaticShader shader) {
+    public void render(Entity entity, StaticRawShader shader) {
         Model model = entity.getModel();
+        for (Mesh mesh : model.getMeshes()) {
+            if (mesh instanceof RawMesh) {
+                mesh.bind();
+                shader.bind();
+                glEnableVertexAttribArray(0);
+                Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(entity.getPosition(), entity.getRotation(), entity.getScale());
+                MTLColor color = mesh.getMaterial().getDiffuseColor();
+                shader.loadColorVector(new Vector3f(color.r, color.g, color.b));
+                shader.loadTransformationMatrix(transformationMatrix);
+                shader.bind();
+                glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
+                glDisableVertexAttribArray(0);
+                mesh.unbind();
+            }
+        }
 
-        model.getVao().bind();
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(entity.getPosition(),
-                entity.getRotation(), entity.getScale());
-        shader.loadTransformationMatrix(transformationMatrix);
-
-        glActiveTexture(GL_TEXTURE0);
-        model.getTexture().bind();
-        glDrawElements(GL_TRIANGLES, model.getVao().getVertexCount(), GL_UNSIGNED_INT, 0);
-        glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(0);
+//        model.getVao().bind();
+//        glEnableVertexAttribArray(0);
+//        glEnableVertexAttribArray(1);
+//        Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(entity.getPosition(),
+//                entity.getRotation(), entity.getScale());
+//        shader.loadTransformationMatrix(transformationMatrix);
+//
+//        glActiveTexture(GL_TEXTURE0);
+//        model.getTexture().bind();
+//        glDrawElements(GL_TRIANGLES, model.getVao().getVertexCount(), GL_UNSIGNED_INT, 0);
+//        glDisableVertexAttribArray(1);
+//        glDisableVertexAttribArray(0);
     }
 
     @Override
     public void destroy() {
-        staticShader.destroy();
+        staticRawShader.destroy();
     }
 
-    public StaticShader getShader() {
-        return staticShader;
+    public StaticRawShader getShader() {
+        return staticRawShader;
     }
 }
