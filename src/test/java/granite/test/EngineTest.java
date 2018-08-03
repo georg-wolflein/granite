@@ -35,8 +35,8 @@ public class EngineTest {
 //                entity2 = engine.getEntityManager().addEntity(model, new Vector3f(0, 1, -1), new Vector3f(0, 1, 0), 1);
                 try {
                     Model model = engine.getModelManager().load("test", "cubes.obj");
-                    entity1 = engine.getEntityManager().addEntity(model, new Vector3f(0, 0, -1), new Vector3f(0, 0, 0), 1);
-                    entity1 = engine.getEntityManager().addEntity(model, new Vector3f(0, 0, -1), new Vector3f(0, 0, 0), 3);
+                    entity1 = engine.getEntityManager().addEntity(model, new Vector3f(0, 0, -10), new Vector3f(0, 0, 0), 1);
+                    entity2 = engine.getEntityManager().addEntity(model, new Vector3f(0, 0, -10), new Vector3f(0, 0, 0), 3);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -48,16 +48,16 @@ public class EngineTest {
                 Camera camera = engine.getCamera();
                 float x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0;
                 if (input.isPressed(GLFW_KEY_W)) {
-                    z = -.02f;
+                    z = -.2f;
                 }
                 if (input.isPressed(GLFW_KEY_A)) {
-                    x = -.02f;
+                    x = -.2f;
                 }
                 if (input.isPressed(GLFW_KEY_S)) {
-                    z = .02f;
+                    z = .2f;
                 }
                 if (input.isPressed(GLFW_KEY_D)) {
-                    x = .02f;
+                    x = .2f;
                 }
                 if (input.isPressed(GLFW_KEY_UP)) {
                     rx = -1f;
@@ -75,7 +75,7 @@ public class EngineTest {
                 camera.rotate(new Vector3f(rx, ry, rz));
 
                 entity1.move(new Vector3f(0, 0, -.1f));
-                //entity2.rotate(new Vector3f(1, 0, 0));
+                entity2.rotate(new Vector3f(1, 0, 0));
             }
 
             @Override

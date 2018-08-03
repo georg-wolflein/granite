@@ -4,12 +4,12 @@ import granite.engine.core.TimeManager;
 import granite.engine.display.DisplayManager;
 import granite.engine.entities.Camera;
 import granite.engine.entities.EntityManager;
+import granite.engine.entities.Light;
 import granite.engine.input.Input;
 import granite.engine.model.ModelManager;
 import granite.engine.rendering.Renderer;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.*;
-
-import java.awt.font.ImageGraphicAttribute;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -23,6 +23,7 @@ public class Engine {
     private ModelManager modelManager;
     private EntityManager entityManager;
     private Camera camera;
+    private Light light;
     private IGame game;
 
     public Engine(IGame game) {
@@ -38,6 +39,7 @@ public class Engine {
         renderer = new Renderer();
         entityManager = new EntityManager();
         camera = new Camera();
+        light = new Light(new Vector3f(15, 0, 20), new Vector3f(1, 1, 1));
         this.game = game;
         glEnable(GL_DEPTH_TEST);
     }
@@ -50,6 +52,7 @@ public class Engine {
         getRenderer().attach(this);
         getEntityManager().attach(this);
         getCamera().attach(this);
+        getLight().attach(this);
         game.attach(this);
 
         while (!getDisplayManager().isCloseRequested()) {
@@ -58,6 +61,7 @@ public class Engine {
             getModelManager().update(this);
             getEntityManager().update(this);
             getCamera().update(this);
+            getLight().update(this);
             getRenderer().update(this);
             game.update(this);
             getInput().update(this);
@@ -70,6 +74,7 @@ public class Engine {
     public void destroy() {
         getRenderer().destroy();
         getCamera().destroy();
+        getLight().destroy();
         getInput().destroy();
         getModelManager().destroy();
         getEntityManager().destroy();
@@ -106,5 +111,9 @@ public class Engine {
 
     public Camera getCamera() {
         return camera;
+    }
+
+    public Light getLight() {
+        return light;
     }
 }

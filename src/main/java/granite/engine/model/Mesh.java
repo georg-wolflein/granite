@@ -18,13 +18,15 @@ public abstract class Mesh implements IBindable, IDestroyable {
     private int id, vertexCount;
     private List<Integer> vbos = new ArrayList<>();
     private Material material;
+    public final int VERTICES_ATTRIBUTE_NUMBER = 0;
+    public final int NORMALS_ATTRIBUTE_NUMBER = 1;
 
     public Mesh(FloatBuffer vertices, FloatBuffer normals, IntBuffer indices, int vertexCount, Material material) {
         this.id = glGenVertexArrays();
         this.vertexCount = vertexCount;
         this.material = material;
-        storeDataInAttributeList(0, 3, vertices);
-        storeDataInAttributeList(1, 3, normals);
+        storeDataInAttributeList(VERTICES_ATTRIBUTE_NUMBER, 3, vertices);
+        storeDataInAttributeList(NORMALS_ATTRIBUTE_NUMBER, 3, normals);
         bindIndicesBuffer(indices);
     }
 
@@ -78,5 +80,15 @@ public abstract class Mesh implements IBindable, IDestroyable {
             glDeleteBuffers(vbo);
         }
         glDeleteVertexArrays(getId());
+    }
+
+    public void enableArrays() {
+        glEnableVertexAttribArray(VERTICES_ATTRIBUTE_NUMBER);
+        glEnableVertexAttribArray(NORMALS_ATTRIBUTE_NUMBER);
+    }
+
+    public void disableArrays() {
+        glDisableVertexAttribArray(VERTICES_ATTRIBUTE_NUMBER);
+        glDisableVertexAttribArray(NORMALS_ATTRIBUTE_NUMBER);
     }
 }

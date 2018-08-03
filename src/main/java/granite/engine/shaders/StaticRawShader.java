@@ -1,6 +1,7 @@
 package granite.engine.shaders;
 
 import granite.engine.entities.Camera;
+import granite.engine.entities.Light;
 import granite.engine.util.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -11,6 +12,8 @@ public class StaticRawShader extends Shader {
     private int locationProjectionMatrix;
     private int locationViewMatrix;
     private int locationColorVector;
+    private int locationLightPosition;
+    private int locationLightColor;
 
     public StaticRawShader() {
         super("staticRaw.vert", "staticRaw.frag");
@@ -19,7 +22,7 @@ public class StaticRawShader extends Shader {
     @Override
     protected void bindAttributes() {
         super.bindAttribute(0, "position");
-        super.bindAttribute(1, "color");
+        super.bindAttribute(1, "normal");
     }
 
     @Override
@@ -28,6 +31,8 @@ public class StaticRawShader extends Shader {
         locationProjectionMatrix = super.getUniformLocation("projectionMatrix");
         locationViewMatrix = super.getUniformLocation("viewMatrix");
         locationColorVector = super.getUniformLocation("color");
+        locationLightPosition = super.getUniformLocation("lightPosition");
+        locationLightColor = super.getUniformLocation("lightColor");
     }
 
     public void loadTransformationMatrix(Matrix4f matrix) {
@@ -44,5 +49,10 @@ public class StaticRawShader extends Shader {
 
     public void loadColorVector(Vector3f vector) {
         super.loadVector(locationColorVector, vector);
+    }
+
+    public void loadLight(Light light) {
+        super.loadVector(locationLightColor, light.getColor());
+        super.loadVector(locationLightPosition, light.getPosition());
     }
 }

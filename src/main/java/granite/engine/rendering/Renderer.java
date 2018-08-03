@@ -13,7 +13,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
 
 public class Renderer implements IEngineObject {
 
@@ -51,13 +50,14 @@ public class Renderer implements IEngineObject {
         for (Mesh mesh : model.getMeshes()) {
             if (mesh instanceof RawMesh) {
                 mesh.bind();
-                glEnableVertexAttribArray(0);
+                mesh.enableArrays();
                 Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(entity.getPosition(), entity.getRotation(), entity.getScale());
                 MTLColor color = mesh.getMaterial().getDiffuseColor();
                 shader.loadColorVector(new Vector3f(color.r, color.g, color.b));
                 shader.loadTransformationMatrix(transformationMatrix);
+                shader.loadLight(engine.getLight());
                 glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
-                glDisableVertexAttribArray(0);
+                mesh.disableArrays();
                 mesh.unbind();
             }
         }
