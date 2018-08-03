@@ -2,9 +2,9 @@ package granite.engine.model;
 
 import com.mokiat.data.front.parser.*;
 import granite.engine.core.IDestroyable;
+import granite.engine.util.Buffer;
 import granite.engine.util.Resource;
 import granite.engine.util.ResourceType;
-import org.lwjgl.BufferUtils;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
@@ -123,17 +123,24 @@ public class Model implements IDestroyable {
                     }
                 }
                 List<Integer> indices = indexManager.getIndices();
-                List<OBJVertex> vertices = indexManager.getVertices();
-                List<OBJNormal> normals = indexManager.getNormals();
-                //List<OBJTexCoord> textureCoordinates = indexManager.getTextureCoordinates();
-                IntBuffer indexBuf = BufferUtils.createIntBuffer(indices.size());
-                FloatBuffer vertexBuf = BufferUtils.createFloatBuffer(vertices.size() * 3);
-                FloatBuffer normalBuff = BufferUtils.createFloatBuffer(normals.size() * 3);
-                //FloatBuffer textureCoordinateBuff = BufferUtils.createFloatBuffer(textureCoordinates.size() * 2);
-                indices.forEach(indexBuf::put);
-                vertices.forEach(f -> vertexBuf.put(new float[]{f.x, f.y, f.z}));
-                normals.forEach(n -> normalBuff.put(new float[]{n.x, n.y, n.z}));
-                //textureCoordinates.stream().filter(Objects::nonNull).forEachOrdered(t -> textureCoordinateBuff.put(new float[]{t.u, t.v}));
+                List<OBJVertex> objVertices = indexManager.getVertices();
+                List<OBJNormal> objNormals = indexManager.getNormals();
+                List<Float> vertices = new ArrayList<>(objVertices.size() * 3);
+                objVertices.forEach(v -> {
+                    vertices.add(v.x);
+                    vertices.add(v.y);
+                    vertices.add(v.z);
+                });
+                List<Float> normals = new ArrayList<>(objNormals.size() * 3);
+                objNormals.forEach(n -> {
+                    normals.add(n.x);
+                    normals.add(n.y);
+                    normals.add(n.z);
+                });
+                IntBuffer indexBuf = Buffer.createIntBuffer(indices);
+                FloatBuffer vertexBuf = Buffer.createFloatBuffer(vertices);
+                FloatBuffer normalBuff = Buffer.createFloatBuffer(normals);
+                // TODO: get texture coordinates
                 addMesh(new RawMesh(vertexBuf, normalBuff, indexBuf, indices.size(), materials.get(mesh.getMaterialName())));
             }
         }

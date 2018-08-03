@@ -22,8 +22,6 @@ public class MathUtil {
         float xScale = yScale / aspectRatio;
         float frustumLength = farPlane - nearPlane;
         Matrix4f projectionMatrix = new Matrix4f();
-
-        projectionMatrix = new Matrix4f();
         projectionMatrix.identity();
         projectionMatrix.m00(xScale);
         projectionMatrix.m11(yScale);

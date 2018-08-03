@@ -39,7 +39,7 @@ public abstract class Mesh implements IBindable, IDestroyable {
     }
 
     protected void storeDataInAttributeList(int attributeNumber, int coordinateSize, FloatBuffer data) {
-        data.flip();
+        //data.flip();
         bind();
         int vboId = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboId);
@@ -51,7 +51,7 @@ public abstract class Mesh implements IBindable, IDestroyable {
     }
 
     protected void bindIndicesBuffer(IntBuffer indices) {
-        indices.flip();
+        //indices.flip();
         bind();
         int vboId = glGenBuffers();
         vbos.add(vboId);
