@@ -32,7 +32,7 @@ public class Engine {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
 
-        timeManager = new TimeManager();
+        timeManager = new TimeManager(50);
         displayManager = new DisplayManager("GRANITE", 800, 600, false);
         modelManager = new ModelManager();
         input = new Input();

@@ -7,6 +7,11 @@ public class TimeManager implements IEngineObject {
     private long lastTime;
     private double delta;
     private double time;
+    private double targetDelta;
+
+    public TimeManager(double targetFps) {
+        this.targetDelta = 1. / targetFps;
+    }
 
     public double getTime() {
         return time;
@@ -25,10 +30,14 @@ public class TimeManager implements IEngineObject {
 
     @Override
     public void update(Engine engine) {
-        long now = System.nanoTime();
-        delta = (now - lastTime) / (double) Constants.NANOSECONDS_PER_SECOND;
+        long now;
+        do {
+            now = System.nanoTime();
+            delta = (now - lastTime) / (double) Constants.NANOSECONDS_PER_SECOND;
+        } while (delta < targetDelta);
         time += delta;
         lastTime = now;
+        System.out.println(getFps());
     }
 
     @Override

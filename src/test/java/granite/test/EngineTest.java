@@ -10,6 +10,7 @@ import org.joml.Vector3f;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -37,6 +38,9 @@ public class EngineTest {
                     Model model = engine.getModelManager().load("test", "cubes.obj");
                     entity1 = engine.getEntityManager().addEntity(model, new Vector3f(0, 0, -10), new Vector3f(0, 0, 0), 1);
                     entity2 = engine.getEntityManager().addEntity(model, new Vector3f(0, 0, -10), new Vector3f(0, 0, 0), 3);
+                    for (int i = 0; i < 100; i++) {
+                        engine.getEntityManager().addEntity(model, new Vector3f(ThreadLocalRandom.current().nextInt(100), ThreadLocalRandom.current().nextInt(100), ThreadLocalRandom.current().nextInt(100)), new Vector3f(0, 0, 0), 1);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -73,9 +77,6 @@ public class EngineTest {
                 }
                 camera.move(new Vector3f(x, y, z));
                 camera.rotate(new Vector3f(rx, ry, rz));
-
-                entity1.move(new Vector3f(0, 0, -.1f));
-                entity2.rotate(new Vector3f(1, 0, 0));
             }
 
             @Override
