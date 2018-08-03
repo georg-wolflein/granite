@@ -53,7 +53,7 @@ public class Renderer implements IEngineObject {
                 mesh.enableArrays();
                 Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(entity.getPosition(), entity.getRotation(), entity.getScale());
                 MTLColor color = mesh.getMaterial().getDiffuseColor();
-                shader.loadColorVector(new Vector3f(color.r, color.g, color.b));
+                shader.loadDiffuseColor(new Vector3f(color.r, color.g, color.b));
                 shader.loadTransformationMatrix(transformationMatrix);
                 shader.loadLight(engine.getLight());
                 glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT, 0);

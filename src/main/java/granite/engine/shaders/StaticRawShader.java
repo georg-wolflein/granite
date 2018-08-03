@@ -6,17 +6,21 @@ import granite.engine.util.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import static org.lwjgl.opengl.GL11.*;
+
 public class StaticRawShader extends Shader {
 
     private int locationTransformationMatrix;
     private int locationProjectionMatrix;
     private int locationViewMatrix;
-    private int locationColorVector;
+    private int locationDiffuseColor;
     private int locationLightPosition;
     private int locationLightColor;
 
     public StaticRawShader() {
         super("staticRaw.vert", "staticRaw.frag");
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
     }
 
     @Override
@@ -30,7 +34,7 @@ public class StaticRawShader extends Shader {
         locationTransformationMatrix = super.getUniformLocation("transformationMatrix");
         locationProjectionMatrix = super.getUniformLocation("projectionMatrix");
         locationViewMatrix = super.getUniformLocation("viewMatrix");
-        locationColorVector = super.getUniformLocation("color");
+        locationDiffuseColor = super.getUniformLocation("diffuseColor");
         locationLightPosition = super.getUniformLocation("lightPosition");
         locationLightColor = super.getUniformLocation("lightColor");
     }
@@ -47,8 +51,8 @@ public class StaticRawShader extends Shader {
         super.loadMatrix(locationViewMatrix, MathUtil.createViewMatrix(camera));
     }
 
-    public void loadColorVector(Vector3f vector) {
-        super.loadVector(locationColorVector, vector);
+    public void loadDiffuseColor(Vector3f vector) {
+        super.loadVector(locationDiffuseColor, vector);
     }
 
     public void loadLight(Light light) {
