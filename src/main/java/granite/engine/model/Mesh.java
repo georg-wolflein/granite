@@ -2,7 +2,7 @@ package granite.engine.model;
 
 import granite.engine.core.IBindable;
 import granite.engine.core.IDestroyable;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.*;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public abstract class Mesh implements IBindable, IDestroyable {
@@ -37,6 +37,7 @@ public abstract class Mesh implements IBindable, IDestroyable {
     }
 
     protected void storeDataInAttributeList(int attributeNumber, int coordinateSize, FloatBuffer data) {
+        data.flip();
         bind();
         int vboId = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboId);
@@ -48,6 +49,7 @@ public abstract class Mesh implements IBindable, IDestroyable {
     }
 
     protected void bindIndicesBuffer(IntBuffer indices) {
+        indices.flip();
         bind();
         int vboId = glGenBuffers();
         vbos.add(vboId);

@@ -13,8 +13,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.*;
 
 public class Renderer implements IEngineObject {
 
@@ -27,7 +26,7 @@ public class Renderer implements IEngineObject {
 
     @Override
     public void attach(Engine engine) {
-        //glClearColor(0f, 1f, 0f, 1f);
+        glClearColor(0f, 0f, 0f, 1f);
         glClear(GL_COLOR_BUFFER_BIT);
         projectionMatrix = MathUtil.createProjectionMatrix(engine.getDisplayManager().getWidth(),
                 engine.getDisplayManager().getHeight(), FIELD_OF_VIEW, NEAR_PLANE, FAR_PLANE);
@@ -40,25 +39,23 @@ public class Renderer implements IEngineObject {
     @Override
     public void update(Engine engine) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        staticRawShader.loadViewMatrix(engine.getCamera());
         for (Entity entity : engine.getEntityManager().getEntities()) {
-            render(entity, staticRawShader);
+            render(entity, engine, staticRawShader);
         }
-        staticRawShader.unbind();
     }
 
-    public void render(Entity entity, StaticRawShader shader) {
+    public void render(Entity entity, Engine engine, StaticRawShader shader) {
+        shader.bind();
+        shader.loadViewMatrix(engine.getCamera());
         Model model = entity.getModel();
         for (Mesh mesh : model.getMeshes()) {
             if (mesh instanceof RawMesh) {
                 mesh.bind();
-                shader.bind();
                 glEnableVertexAttribArray(0);
                 Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(entity.getPosition(), entity.getRotation(), entity.getScale());
                 MTLColor color = mesh.getMaterial().getDiffuseColor();
                 shader.loadColorVector(new Vector3f(color.r, color.g, color.b));
                 shader.loadTransformationMatrix(transformationMatrix);
-                shader.bind();
                 glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
                 glDisableVertexAttribArray(0);
                 mesh.unbind();
