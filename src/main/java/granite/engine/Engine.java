@@ -3,11 +3,10 @@ package granite.engine;
 import granite.engine.core.TimeManager;
 import granite.engine.display.DisplayManager;
 import granite.engine.entities.Camera;
-import granite.engine.entities.EntityManager;
 import granite.engine.entities.Light;
 import granite.engine.input.Input;
 import granite.engine.model.ModelManager;
-import granite.engine.rendering.Renderer;
+import granite.engine.rendering.MasterRenderer;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.*;
 
@@ -19,9 +18,8 @@ public class Engine {
     private TimeManager timeManager;
     private DisplayManager displayManager;
     private Input input;
-    private Renderer renderer;
+    private MasterRenderer renderer;
     private ModelManager modelManager;
-    private EntityManager entityManager;
     private Camera camera;
     private Light light;
     private IGame game;
@@ -36,8 +34,7 @@ public class Engine {
         displayManager = new DisplayManager("GRANITE", 800, 600, false);
         modelManager = new ModelManager();
         input = new Input();
-        renderer = new Renderer();
-        entityManager = new EntityManager();
+        renderer = new MasterRenderer();
         camera = new Camera();
         light = new Light(new Vector3f(15, 0, 20), new Vector3f(1, 1, 1));
         this.game = game;
@@ -50,7 +47,6 @@ public class Engine {
         getInput().attach(this);
         getModelManager().attach(this);
         getRenderer().attach(this);
-        getEntityManager().attach(this);
         getCamera().attach(this);
         getLight().attach(this);
         game.attach(this);
@@ -59,7 +55,6 @@ public class Engine {
             getTimeManager().update(this);
             getDisplayManager().update(this);
             getModelManager().update(this);
-            getEntityManager().update(this);
             getCamera().update(this);
             getLight().update(this);
             getRenderer().update(this);
@@ -77,7 +72,6 @@ public class Engine {
         getLight().destroy();
         getInput().destroy();
         getModelManager().destroy();
-        getEntityManager().destroy();
         getDisplayManager().destroy();
         getTimeManager().destroy();
         game.destroy();
@@ -97,16 +91,12 @@ public class Engine {
         return input;
     }
 
-    public Renderer getRenderer() {
+    public MasterRenderer getRenderer() {
         return renderer;
     }
 
     public ModelManager getModelManager() {
         return modelManager;
-    }
-
-    public EntityManager getEntityManager() {
-        return entityManager;
     }
 
     public Camera getCamera() {

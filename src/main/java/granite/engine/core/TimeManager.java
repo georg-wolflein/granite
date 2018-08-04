@@ -37,7 +37,7 @@ public class TimeManager implements IEngineObject {
         } while (delta < targetDelta);
         time += delta;
         lastTime = now;
-        System.out.println(getFps());
+//        System.out.println(getFps());
     }
 
     @Override
