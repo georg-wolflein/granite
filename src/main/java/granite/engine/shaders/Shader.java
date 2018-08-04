@@ -31,7 +31,6 @@ public abstract class Shader implements IDestroyable, IBindable {
         bindAttributes();
         glLinkProgram(programId);
         glValidateProgram(programId);
-        getAllUniformLocations();
     }
 
     @Override
@@ -60,29 +59,43 @@ public abstract class Shader implements IDestroyable, IBindable {
         glBindAttribLocation(programId, attribute, variableName);
     }
 
-    protected abstract void getAllUniformLocations();
-
     protected int getUniformLocation(String name) {
         return glGetUniformLocation(programId, name);
     }
 
-    protected void loadFloat(int location, float value) {
+    private void loadFloat(int location, float value) {
         glUniform1f(location, value);
     }
 
-    protected void loadVector(int location, Vector3f value) {
+    private void loadVector(int location, Vector3f value) {
         glUniform3f(location, value.x, value.y, value.z);
     }
 
-    protected void loadBoolean(int location, boolean value) {
+    private void loadBoolean(int location, boolean value) {
         loadFloat(location, value ? 1 : 0);
     }
 
-    protected void loadMatrix(int location, Matrix4f value) {
+    private void loadMatrix(int location, Matrix4f value) {
         FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
         value.get(buffer);
         //buffer.flip();
         glUniformMatrix4fv(location, false, buffer);
+    }
+
+    protected void loadFloat(String name, float value) {
+        loadFloat(getUniformLocation(name), value);
+    }
+
+    protected void loadVector(String name, Vector3f value) {
+        loadVector(getUniformLocation(name), value);
+    }
+
+    protected void loadBoolean(String name, boolean value) {
+        loadBoolean(getUniformLocation(name), value);
+    }
+
+    protected void loadMatrix(String name, Matrix4f value) {
+        loadMatrix(getUniformLocation(name), value);
     }
 
     private static int loadShader(String file, int type) {
