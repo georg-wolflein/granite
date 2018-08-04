@@ -4,7 +4,7 @@ import granite.engine.Engine;
 import granite.engine.core.IEngineObject;
 import org.joml.Vector3f;
 
-public class Camera extends Object3D implements IEngineObject {
+public class Camera extends Entity implements IEngineObject {
 
 
     public Camera() {

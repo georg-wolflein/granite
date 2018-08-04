@@ -13,11 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class EntityManager implements IDestroyable {
 
-    private List<Entity> entities = new ArrayList<>();
-    private Map<Mesh, List<Entity>> meshes = new ConcurrentHashMap<>();
+    private List<EntityOld> entities = new ArrayList<>();
+    private Map<Mesh, List<EntityOld>> meshes = new ConcurrentHashMap<>();
 
-    public Entity addEntity(Model model, Vector3f position, Vector3f rotation, float scale) {
-        Entity entity = new Entity(model, position, rotation, scale);
+    public EntityOld addEntity(Model model, Vector3f position, Vector3f rotation, float scale) {
+        EntityOld entity = new EntityOld(model, position, rotation, scale);
         entities.add(entity);
         for (Mesh mesh : entity.getModel().getMeshes()) {
             meshes.putIfAbsent(mesh, new LinkedList<>());
@@ -26,11 +26,11 @@ public class EntityManager implements IDestroyable {
         return entity;
     }
 
-    public List<Entity> getEntities() {
+    public List<EntityOld> getEntities() {
         return entities;
     }
 
-    public Map<Mesh, List<Entity>> getMeshes() {
+    public Map<Mesh, List<EntityOld>> getMeshes() {
         return meshes;
     }
 

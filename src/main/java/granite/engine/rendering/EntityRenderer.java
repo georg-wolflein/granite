@@ -1,7 +1,7 @@
 package granite.engine.rendering;
 
 import granite.engine.entities.Camera;
-import granite.engine.entities.Entity;
+import granite.engine.entities.EntityOld;
 import granite.engine.entities.EntityManager;
 import granite.engine.entities.Light;
 import granite.engine.model.Material;
@@ -24,7 +24,7 @@ public class EntityRenderer extends BatchRenderer<EntityShader> {
     }
 
     @Override
-    public void renderBatch(Mesh mesh, List<Entity> entities, Camera camera, Light light) {
+    public void renderBatch(Mesh mesh, List<EntityOld> entities, Camera camera, Light light) {
         Vector3f cameraPosition = camera.getPosition();
         getShader().bind();
         getShader().loadViewMatrix(camera);
@@ -34,7 +34,7 @@ public class EntityRenderer extends BatchRenderer<EntityShader> {
         getShader().loadLight(light);
         mesh.bind();
         mesh.enableArrays();
-        for (Entity entity : entities) {
+        for (EntityOld entity : entities) {
             if (new Vector3f(cameraPosition).sub(entity.getPosition()).length() <= RENDER_DISTANCE) {
                 Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(entity.getPosition(), entity.getRotation(), entity.getScale());
                 getShader().loadTransformationMatrix(transformationMatrix);

@@ -3,7 +3,7 @@ package granite.test;
 import granite.engine.Engine;
 import granite.engine.IGame;
 import granite.engine.entities.Camera;
-import granite.engine.entities.Entity;
+import granite.engine.entities.EntityOld;
 import granite.engine.input.Input;
 import granite.engine.model.Model;
 import org.joml.Vector3f;
@@ -21,7 +21,7 @@ public class EngineTest {
 
         Engine engine = new Engine(new IGame() {
 
-            Entity entity1, entity2;
+            EntityOld entity1, entity2;
 
             @Override
             public void attach(Engine engine) {

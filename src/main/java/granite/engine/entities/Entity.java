@@ -1,32 +1,56 @@
 package granite.engine.entities;
 
+import granite.engine.model.Mesh;
 import granite.engine.model.Model;
+import granite.engine.tree.Node;
 import org.joml.Vector3f;
 
-public class Entity extends Object3D {
+import java.util.List;
+import java.util.Map;
 
-    private Model model;
-    private float scale;
+public class Entity extends Node<Entity> {
 
-    public Entity(Model model, Vector3f position, Vector3f rotation, float scale) {
-        super(position, rotation);
-        this.model = model;
-        this.scale = scale;
+    private Vector3f position;
+    private Vector3f rotation;
+    private Map<Mesh, Model> meshes;
+
+    private List<Entity> children;
+    private Entity parent;
+
+    public Entity(Vector3f position, Vector3f rotation) {
+        this.position = position;
+        this.rotation = rotation;
     }
 
-    public Model getModel() {
-        return model;
+    public Vector3f getPosition() {
+        return position;
     }
 
-    public void setModel(Model model) {
-        this.model = model;
+    public void setPosition(Vector3f position) {
+        this.position = position;
     }
 
-    public float getScale() {
-        return scale;
+    public Vector3f getRotation() {
+        return rotation;
     }
 
-    public void setScale(float scale) {
-        this.scale = scale;
+    public void setRotation(Vector3f rotation) {
+        this.rotation = rotation;
+    }
+
+    public void move(Vector3f d) {
+        position.add(d);
+    }
+
+    public void rotate(Vector3f r) {
+        rotation.add(r);
+    }
+
+    public Vector3f getAbsolutePosition() {
+        if (getParent() == null) {
+            return new Vector3f(getPosition());
+        } else {
+            return new Vector3f(getPosition()).add(getParent().getAbsolutePosition());
+        }
     }
 }
