@@ -5,17 +5,25 @@ import granite.engine.model.Model;
 import granite.engine.tree.Node;
 import org.joml.Vector3f;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Entity extends Node<Entity> {
 
     private Vector3f position;
     private Vector3f rotation;
-    private Map<Mesh, Model> meshes;
+    private Map<Mesh, Collection<Model>> meshes = new HashMap<>();
 
     public Entity(Vector3f position, Vector3f rotation) {
         this.position = position;
         this.rotation = rotation;
+    }
+
+    public Entity() {
+        this(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0));
     }
 
     @Override
@@ -53,5 +61,26 @@ public class Entity extends Node<Entity> {
         } else {
             return new Vector3f(getPosition()).add(getParent().getAbsolutePosition());
         }
+    }
+
+    @Override
+    public void addDescendants(Collection<Entity> descendants) {
+        super.addDescendants(descendants);
+        descendants.forEach(descendant -> {
+            if (descendant instanceof Model) {
+                Model model = (Model) descendant;
+                for (Mesh mesh : model.getMeshes()) {
+                    meshes.putIfAbsent(mesh, new HashSet<>());
+                    meshes.get(mesh).add(model);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void removeDescendants(Collection<Entity> descendants) {
+        super.removeDescendants(descendants);
+        Collection<Model> models = descendants.parallelStream().filter(d -> d instanceof Model).map(d -> (Model) d).collect(Collectors.toSet());
+        meshes.values().forEach(m -> m.removeAll(models));
     }
 }

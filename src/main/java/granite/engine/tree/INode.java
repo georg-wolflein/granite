@@ -16,7 +16,7 @@ public interface INode<T extends INode<T>> {
 
     Collection<T> getDescendants();
 
-    void addDescendant(T descendant);
+    void addDescendants(Collection<T> descendants);
 
-    void removeDescendant(T descendant);
+    void removeDescendants(Collection<T> descendants);
 }

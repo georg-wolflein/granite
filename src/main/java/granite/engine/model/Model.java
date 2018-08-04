@@ -2,6 +2,7 @@ package granite.engine.model;
 
 import com.mokiat.data.front.parser.*;
 import granite.engine.core.IDestroyable;
+import granite.engine.entities.Entity;
 import granite.engine.util.Buffer;
 import granite.engine.util.Resource;
 import granite.engine.util.ResourceType;
@@ -10,10 +11,11 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Model implements IDestroyable {
+public class Model extends Entity implements IDestroyable {
 
     public Model(String name) {
         this.name = name;
@@ -154,5 +156,25 @@ public class Model implements IDestroyable {
             mesh.destroy();
         }
         materials.destroy();
+    }
+
+    @Override
+    public void addChild(Entity child) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeChild(Entity child) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void addDescendants(Collection<Entity> descendants) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeDescendants(Collection<Entity> descendants) {
+        throw new UnsupportedOperationException();
     }
 }
