@@ -110,7 +110,9 @@ public class Model implements IDestroyable {
         for (String libraryReference : objModel.getMaterialLibraries()) {
             final MTLLibrary library = mtlParser.parse(Resource.loadResource(ResourceType.MODEL, libraryReference));
             for (MTLMaterial material : library.getMaterials()) {
-                materials.add(new Material(material));
+                MTLColor diffuse = material.getDiffuseColor();
+                MTLColor specular = material.getSpecularColor();
+                materials.add(new Material(material.getName(), new Color(diffuse.r, diffuse.g, diffuse.b), new Color(specular.r, specular.g, specular.b), material.getSpecularExponent()));
             }
         }
 

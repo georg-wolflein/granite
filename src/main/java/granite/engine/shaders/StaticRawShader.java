@@ -2,9 +2,9 @@ package granite.engine.shaders;
 
 import granite.engine.entities.Camera;
 import granite.engine.entities.Light;
+import granite.engine.model.Color;
 import granite.engine.util.MathUtil;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -16,6 +16,8 @@ public class StaticRawShader extends Shader {
     private int locationDiffuseColor;
     private int locationLightPosition;
     private int locationLightColor;
+    private int locationSpecularColor;
+    private int locationSpecularExponent;
 
     public StaticRawShader() {
         super("staticRaw.vert", "staticRaw.frag");
@@ -37,6 +39,8 @@ public class StaticRawShader extends Shader {
         locationDiffuseColor = super.getUniformLocation("diffuseColor");
         locationLightPosition = super.getUniformLocation("lightPosition");
         locationLightColor = super.getUniformLocation("lightColor");
+        locationSpecularColor = super.getUniformLocation("specularColor");
+        locationSpecularExponent = super.getUniformLocation("specularExponent");
     }
 
     public void loadTransformationMatrix(Matrix4f matrix) {
@@ -51,8 +55,13 @@ public class StaticRawShader extends Shader {
         super.loadMatrix(locationViewMatrix, MathUtil.createViewMatrix(camera));
     }
 
-    public void loadDiffuseColor(Vector3f vector) {
-        super.loadVector(locationDiffuseColor, vector);
+    public void loadDiffuseColor(Color color) {
+        super.loadVector(locationDiffuseColor, color.getVector());
+    }
+
+    public void loadSpecularVariables(Color specularColor, float specularExponent) {
+        super.loadVector(locationSpecularColor, specularColor.getVector());
+        super.loadFloat(locationSpecularExponent, specularExponent);
     }
 
     public void loadLight(Light light) {

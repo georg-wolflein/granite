@@ -39,7 +39,7 @@ public class EngineTest {
                     entity1 = engine.getEntityManager().addEntity(model, new Vector3f(0, 0, -10), new Vector3f(0, 0, 0), 1);
                     entity2 = engine.getEntityManager().addEntity(model, new Vector3f(0, 0, -10), new Vector3f(0, 0, 0), 3);
                     for (int i = 0; i < 100; i++) {
-                        engine.getEntityManager().addEntity(model, new Vector3f(ThreadLocalRandom.current().nextInt(100), ThreadLocalRandom.current().nextInt(100), ThreadLocalRandom.current().nextInt(100)), new Vector3f(0, 0, 0), 1);
+                        engine.getEntityManager().addEntity(model, new Vector3f(ThreadLocalRandom.current().nextInt(-100, 100), ThreadLocalRandom.current().nextInt(-100, 100), ThreadLocalRandom.current().nextInt(-100, 100)), new Vector3f(0, 0, 0), 1);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

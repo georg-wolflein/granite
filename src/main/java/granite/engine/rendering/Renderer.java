@@ -1,9 +1,9 @@
 package granite.engine.rendering;
 
-import com.mokiat.data.front.parser.MTLColor;
 import granite.engine.Engine;
 import granite.engine.core.IEngineObject;
 import granite.engine.entities.Entity;
+import granite.engine.model.Material;
 import granite.engine.model.Mesh;
 import granite.engine.shaders.StaticRawShader;
 import granite.engine.util.MathUtil;
@@ -49,8 +49,9 @@ public class Renderer implements IEngineObject {
         Vector3f cameraPosition = engine.getCamera().getPosition();
         shader.bind();
         shader.loadViewMatrix(engine.getCamera());
-        MTLColor color = mesh.getMaterial().getDiffuseColor();
-        shader.loadDiffuseColor(new Vector3f(color.r, color.g, color.b));
+        Material mtl = mesh.getMaterial();
+        shader.loadDiffuseColor(mtl.getDiffuseColor());
+        shader.loadSpecularVariables(mtl.getSpecularColor(), mtl.getSpecularExponent());
         shader.loadLight(engine.getLight());
         mesh.bind();
         mesh.enableArrays();
