@@ -3,19 +3,19 @@ package granite.engine.tree;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class Node<T extends Node<T>> implements INode<T> {
+public class Node<T extends INode<T>> implements INode<T> {
 
-    private T parent = null;
+    private INode<T> parent = null;
     private Collection<T> children = new HashSet<>();
     private Collection<T> descendants = new HashSet<>();
 
     @Override
-    public T getParent() {
+    public INode<T> getParent() {
         return parent;
     }
 
     @Override
-    public void setParent(T parent) {
+    public void setParent(INode<T> parent) {
         this.parent = parent;
     }
 
@@ -29,7 +29,7 @@ public class Node<T extends Node<T>> implements INode<T> {
         children.add(child);
         addDescendant(child);
         child.getDescendants().forEach(this::addDescendant);
-        //child.setParent(this);
+        child.setParent(this);
     }
 
     @Override

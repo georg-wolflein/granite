@@ -5,7 +5,6 @@ import granite.engine.model.Model;
 import granite.engine.tree.Node;
 import org.joml.Vector3f;
 
-import java.util.List;
 import java.util.Map;
 
 public class Entity extends Node<Entity> {
@@ -14,12 +13,14 @@ public class Entity extends Node<Entity> {
     private Vector3f rotation;
     private Map<Mesh, Model> meshes;
 
-    private List<Entity> children;
-    private Entity parent;
-
     public Entity(Vector3f position, Vector3f rotation) {
         this.position = position;
         this.rotation = rotation;
+    }
+
+    @Override
+    public Entity getParent() {
+        return (Entity) super.getParent();
     }
 
     public Vector3f getPosition() {
@@ -48,7 +49,7 @@ public class Entity extends Node<Entity> {
 
     public Vector3f getAbsolutePosition() {
         if (getParent() == null) {
-            return new Vector3f(getPosition());
+            return getPosition();
         } else {
             return new Vector3f(getPosition()).add(getParent().getAbsolutePosition());
         }

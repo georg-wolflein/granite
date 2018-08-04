@@ -4,9 +4,9 @@ import java.util.Collection;
 
 public interface INode<T extends INode<T>> {
 
-    T getParent();
+    INode<T> getParent();
 
-    void setParent(T parent);
+    void setParent(INode<T> parent);
 
     Collection<T> getChildren();
 
