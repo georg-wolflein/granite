@@ -3,6 +3,7 @@ package granite.engine.model;
 import com.mokiat.data.front.parser.*;
 import granite.engine.core.IDestroyable;
 import granite.engine.entities.Entity;
+import granite.engine.rendering.IRenderer;
 import granite.engine.util.Buffer;
 import granite.engine.util.Resource;
 import granite.engine.util.ResourceType;
@@ -103,7 +104,7 @@ public class Model extends Entity implements IDestroyable {
 
     }
 
-    public void load(String file) throws IOException {
+    public void load(String file, IRenderer renderer) throws IOException {
         final IOBJParser objParser = new OBJParser();
         final IMTLParser mtlParser = new MTLParser();
 
@@ -145,7 +146,7 @@ public class Model extends Entity implements IDestroyable {
                 FloatBuffer vertexBuf = Buffer.createFloatBuffer(vertices);
                 FloatBuffer normalBuff = Buffer.createFloatBuffer(normals);
                 // TODO: get texture coordinates
-                addMesh(new RawMesh(vertexBuf, normalBuff, indexBuf, indices.size(), materials.get(mesh.getMaterialName())));
+                addMesh(new RawMesh(vertexBuf, normalBuff, indexBuf, indices.size(), materials.get(mesh.getMaterialName()), renderer));
             }
         }
     }

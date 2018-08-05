@@ -2,7 +2,10 @@ package granite.engine.entities;
 
 import granite.engine.model.Mesh;
 import granite.engine.model.Model;
+import granite.engine.tree.INode;
 import granite.engine.tree.Node;
+import granite.engine.util.CachedValue;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.util.Collection;
@@ -13,54 +16,52 @@ import java.util.stream.Collectors;
 
 public class Entity extends Node<Entity> {
 
-    private Vector3f position;
-    private Vector3f rotation;
     private Map<Mesh, Collection<Model>> meshes = new HashMap<>();
-
-    public Entity(Vector3f position, Vector3f rotation) {
-        this.position = position;
-        this.rotation = rotation;
-    }
-
-    public Entity() {
-        this(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0));
-    }
+    private Vector3f translation = new Vector3f(0, 0, 0);
+    private Vector3f rotation = new Vector3f(0, 0, 0);
+    private Vector3f scale = new Vector3f(1, 1, 1);
+    private CachedValue<Matrix4f> absoluteTransformation = new CachedValue<>(() -> getParent() == null ? new Matrix4f(getRelativeTransformation()) : new Matrix4f(getParent().getAbsoluteTransformation()).mul(getRelativeTransformation()));
 
     @Override
     public Entity getParent() {
         return (Entity) super.getParent();
     }
 
-    public Vector3f getPosition() {
-        return position;
+    @Override
+    public void setParent(INode<Entity> parent) {
+        super.setParent(parent);
+        absoluteTransformation.invalidate();
+        getDescendants().forEach(d -> d.absoluteTransformation.invalidate());
     }
 
-    public void setPosition(Vector3f position) {
-        this.position = position;
+    public Matrix4f getRelativeTransformation() {
+        return new Matrix4f().scale(scale).rotateXYZ(rotation).translate(translation);
     }
 
-    public Vector3f getRotation() {
-        return rotation;
+    public Matrix4f getAbsoluteTransformation() {
+        return new Matrix4f(absoluteTransformation.get());
     }
 
-    public void setRotation(Vector3f rotation) {
-        this.rotation = rotation;
+    public void move(Vector3f offset) {
+        translation.add(offset);
+        absoluteTransformation.invalidate();
+        getDescendants().forEach(d -> d.absoluteTransformation.invalidate());
     }
 
-    public void move(Vector3f d) {
-        position.add(d);
+    public void rotate(Vector3f offset) {
+        rotation.add(offset);
+        absoluteTransformation.invalidate();
+        getDescendants().forEach(d -> d.absoluteTransformation.invalidate());
     }
 
-    public void rotate(Vector3f r) {
-        rotation.add(r);
+    public void scale(Vector3f offset) {
+        scale.mul(offset);
+        absoluteTransformation.invalidate();
+        getDescendants().forEach(d -> d.absoluteTransformation.invalidate());
     }
 
-    public Vector3f getAbsolutePosition() {
-        if (getParent() == null) {
-            return getPosition();
-        } else {
-            return new Vector3f(getPosition()).add(getParent().getAbsolutePosition());
-        }
+    public Map<Mesh, Collection<Model>> getMeshesMap() {
+        return meshes;
     }
 
     @Override

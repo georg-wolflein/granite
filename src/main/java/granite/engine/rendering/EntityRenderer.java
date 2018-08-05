@@ -1,17 +1,13 @@
 package granite.engine.rendering;
 
 import granite.engine.entities.Camera;
-import granite.engine.entities.EntityOld;
-import granite.engine.entities.EntityManager;
 import granite.engine.entities.Light;
 import granite.engine.model.Material;
 import granite.engine.model.Mesh;
+import granite.engine.model.Model;
 import granite.engine.shaders.EntityShader;
-import granite.engine.util.MathUtil;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
-import java.util.List;
+import java.util.Collection;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -20,12 +16,11 @@ public class EntityRenderer extends BatchRenderer<EntityShader> {
     private static final float RENDER_DISTANCE = 1000;
 
     public EntityRenderer() {
-        super(new EntityShader(), new EntityManager());
+        super(new EntityShader());
     }
 
     @Override
-    public void renderBatch(Mesh mesh, List<EntityOld> entities, Camera camera, Light light) {
-        Vector3f cameraPosition = camera.getPosition();
+    public void renderBatch(Mesh mesh, Collection<Model> models, Camera camera, Light light) {
         getShader().bind();
         getShader().loadViewMatrix(camera);
         Material mtl = mesh.getMaterial();
@@ -34,12 +29,10 @@ public class EntityRenderer extends BatchRenderer<EntityShader> {
         getShader().loadLight(light);
         mesh.bind();
         mesh.enableArrays();
-        for (EntityOld entity : entities) {
-            if (new Vector3f(cameraPosition).sub(entity.getPosition()).length() <= RENDER_DISTANCE) {
-                Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(entity.getPosition(), entity.getRotation(), entity.getScale());
-                getShader().loadTransformationMatrix(transformationMatrix);
-                glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
-            }
+        for (Model model : models) {
+            // TODO: render distance check
+            getShader().loadTransformationMatrix(model.getAbsoluteTransformation());
+            glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
         }
         mesh.disableArrays();
         mesh.unbind();

@@ -3,6 +3,7 @@ package granite.engine.model;
 import granite.engine.Engine;
 import granite.engine.core.IEngineObject;
 import granite.engine.core.Manager;
+import granite.engine.rendering.IRenderer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,9 +17,9 @@ public class ModelManager extends Manager<String, Model> implements IEngineObjec
         return models;
     }
 
-    public Model load(String name, String file) throws IOException {
+    public Model load(String name, String file, IRenderer renderer) throws IOException {
         Model model = new Model(name);
-        model.load(file);
+        model.load(file, renderer);
         add(model);
         return model;
     }

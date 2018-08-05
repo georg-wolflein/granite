@@ -2,6 +2,8 @@ package granite.engine.model;
 
 import granite.engine.core.IBindable;
 import granite.engine.core.IDestroyable;
+import granite.engine.core.IRenderable;
+import granite.engine.rendering.IRenderer;
 import org.lwjgl.opengl.*;
 
 import java.nio.FloatBuffer;
@@ -13,21 +15,33 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-public abstract class Mesh implements IBindable, IDestroyable {
+public abstract class Mesh implements IBindable, IDestroyable, IRenderable {
 
     private int id, vertexCount;
     private List<Integer> vbos = new ArrayList<>();
     private Material material;
     public final int VERTICES_ATTRIBUTE_NUMBER = 0;
     public final int NORMALS_ATTRIBUTE_NUMBER = 1;
+    private IRenderer renderer;
 
-    public Mesh(FloatBuffer vertices, FloatBuffer normals, IntBuffer indices, int vertexCount, Material material) {
+    public Mesh(FloatBuffer vertices, FloatBuffer normals, IntBuffer indices, int vertexCount, Material material, IRenderer renderer) {
         this.id = glGenVertexArrays();
         this.vertexCount = vertexCount;
         this.material = material;
         storeDataInAttributeList(VERTICES_ATTRIBUTE_NUMBER, 3, vertices);
         storeDataInAttributeList(NORMALS_ATTRIBUTE_NUMBER, 3, normals);
         bindIndicesBuffer(indices);
+        setRenderer(renderer);
+    }
+
+    @Override
+    public IRenderer getRenderer() {
+        return renderer;
+    }
+
+    @Override
+    public void setRenderer(IRenderer renderer) {
+        this.renderer = renderer;
     }
 
     public int getId() {

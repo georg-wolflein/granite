@@ -4,6 +4,7 @@ import granite.engine.core.TimeManager;
 import granite.engine.display.DisplayManager;
 import granite.engine.entities.Camera;
 import granite.engine.entities.Light;
+import granite.engine.entities.Scene;
 import granite.engine.input.Input;
 import granite.engine.model.ModelManager;
 import granite.engine.rendering.MasterRenderer;
@@ -19,6 +20,7 @@ public class Engine {
     private DisplayManager displayManager;
     private Input input;
     private MasterRenderer renderer;
+    private Scene scene;
     private ModelManager modelManager;
     private Camera camera;
     private Light light;
@@ -35,6 +37,7 @@ public class Engine {
         modelManager = new ModelManager();
         input = new Input();
         renderer = new MasterRenderer();
+        scene = new Scene();
         camera = new Camera();
         light = new Light(new Vector3f(15, 0, 20), new Vector3f(1, 1, 1));
         this.game = game;
@@ -49,6 +52,7 @@ public class Engine {
         getRenderer().attach(this);
         getCamera().attach(this);
         getLight().attach(this);
+        getScene().attach(this);
         game.attach(this);
 
         while (!getDisplayManager().isCloseRequested()) {
@@ -57,6 +61,7 @@ public class Engine {
             getModelManager().update(this);
             getCamera().update(this);
             getLight().update(this);
+            getScene().update(this);
             getRenderer().update(this);
             game.update(this);
             getInput().update(this);
@@ -70,6 +75,7 @@ public class Engine {
         getRenderer().destroy();
         getCamera().destroy();
         getLight().destroy();
+        getScene().destroy();
         getInput().destroy();
         getModelManager().destroy();
         getDisplayManager().destroy();
@@ -105,5 +111,13 @@ public class Engine {
 
     public Light getLight() {
         return light;
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    public IGame getGame() {
+        return game;
     }
 }

@@ -33,13 +33,11 @@ public class MathUtil {
     }
 
     public static Matrix4f createViewMatrix(Camera camera) {
-        Matrix4f viewMatrix = new Matrix4f();
-        viewMatrix.identity();
-        viewMatrix.rotate((float) Math.toRadians(camera.getPitch()), new Vector3f(1, 0, 0));
-        viewMatrix.rotate((float) Math.toRadians(camera.getYaw()), new Vector3f(0, 1, 0));
-        Vector3f position = camera.getPosition();
-        Vector3f negativePosition = new Vector3f(-position.x, -position.y, -position.z);
-        viewMatrix.translate(negativePosition);
-        return viewMatrix;
+        // Invert position
+        Matrix4f pos = new Matrix4f(camera.getAbsoluteTransformation());
+        pos.m30(-pos.m30());
+        pos.m31(-pos.m31());
+        pos.m32(-pos.m32());
+        return pos;
     }
 }

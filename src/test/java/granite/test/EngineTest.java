@@ -3,14 +3,13 @@ package granite.test;
 import granite.engine.Engine;
 import granite.engine.IGame;
 import granite.engine.entities.Camera;
-import granite.engine.entities.EntityOld;
+import granite.engine.entities.Entity;
 import granite.engine.input.Input;
 import granite.engine.model.Model;
 import org.joml.Vector3f;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -21,7 +20,7 @@ public class EngineTest {
 
         Engine engine = new Engine(new IGame() {
 
-            EntityOld entity1, entity2;
+            Entity entity1;
 
             @Override
             public void attach(Engine engine) {
@@ -35,12 +34,14 @@ public class EngineTest {
 //                entity1 = engine.getEntityManager().addEntity(model, new Vector3f(0, 0, -1), new Vector3f(0, 0, 0), 1);
 //                entity2 = engine.getEntityManager().addEntity(model, new Vector3f(0, 1, -1), new Vector3f(0, 1, 0), 1);
                 try {
-                    Model model = engine.getModelManager().load("test", "cubes.obj");
-                    entity1 = engine.getRenderer().getEntityRenderer().getEntityManager().addEntity(model, new Vector3f(0, 0, -10), new Vector3f(0, 0, 0), 1);
-                    entity2 = engine.getRenderer().getEntityRenderer().getEntityManager().addEntity(model, new Vector3f(0, 0, -10), new Vector3f(0, 0, 0), 3);
-                    for (int i = 0; i < 100; i++) {
-                        engine.getRenderer().getEntityRenderer().getEntityManager().addEntity(model, new Vector3f(ThreadLocalRandom.current().nextInt(-100, 100), ThreadLocalRandom.current().nextInt(-100, 100), ThreadLocalRandom.current().nextInt(-100, 100)), new Vector3f(0, 0, 0), 1);
-                    }
+                    Model model = engine.getModelManager().load("cubes", "cubes.obj", engine.getRenderer().getEntityRenderer());
+                    entity1 = new Entity();
+                    entity1.addChild(model);
+                    engine.getCamera().move(new Vector3f(0, 0, 10));
+                    engine.getScene().addChild(entity1);
+//                for (int i = 0; i < 100; i++) {
+//                    engine.getRenderer().getEntityRenderer().getEntityManager().addEntity(model, new Vector3f(ThreadLocalRandom.current().nextInt(-100, 100), ThreadLocalRandom.current().nextInt(-100, 100), ThreadLocalRandom.current().nextInt(-100, 100)), new Vector3f(0, 0, 0), 1);
+//                }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -64,16 +65,16 @@ public class EngineTest {
                     x = .2f;
                 }
                 if (input.isPressed(GLFW_KEY_UP)) {
-                    rx = -1f;
+                    rx = -.05f;
                 }
                 if (input.isPressed(GLFW_KEY_DOWN)) {
-                    rx = 1f;
+                    rx = .05f;
                 }
                 if (input.isPressed(GLFW_KEY_LEFT)) {
-                    ry = -1f;
+                    ry = -.05f;
                 }
                 if (input.isPressed(GLFW_KEY_RIGHT)) {
-                    ry = 1f;
+                    ry = .05f;
                 }
                 camera.move(new Vector3f(x, y, z));
                 camera.rotate(new Vector3f(rx, ry, rz));

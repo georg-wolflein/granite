@@ -50,13 +50,15 @@ public class Node<T extends INode<T>> implements INode<T> {
     @Override
     public void addDescendants(Collection<T> descendants) {
         this.descendants.addAll(descendants);
-        getParent().addDescendants(descendants);
+        if (this.parent != null)
+            getParent().addDescendants(descendants);
     }
 
     @Override
     public void removeDescendants(Collection<T> descendants) {
         this.descendants.removeAll(descendants);
-        getParent().removeDescendants(descendants);
+        if (this.parent != null)
+            getParent().removeDescendants(descendants);
     }
 
 
