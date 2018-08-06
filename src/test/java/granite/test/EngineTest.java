@@ -34,7 +34,7 @@ public class EngineTest {
 //                entity1 = engine.getEntityManager().addEntity(model, new Vector3f(0, 0, -1), new Vector3f(0, 0, 0), 1);
 //                entity2 = engine.getEntityManager().addEntity(model, new Vector3f(0, 1, -1), new Vector3f(0, 1, 0), 1);
                 try {
-                    Model model = engine.getModelManager().load("cubes", "cubes.obj", engine.getRenderer().getEntityRenderer());
+                    Model model = Model.load("cubes.obj", engine.getRenderer().getEntityRenderer());
                     entity1 = new Entity();
                     entity1.addChild(model);
                     engine.getScene().getCamera().move(new Vector3f(0, 0, 10));

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public abstract class Manager<K, V extends IDestroyable> implements IManager<K, V> {
 
-    private Map<K, V> items = new HashMap<>();
+    protected Map<K, V> items = new HashMap<>();
 
     protected final K add(K key, V item) {
         items.put(key, item);

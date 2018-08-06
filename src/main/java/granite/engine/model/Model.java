@@ -18,17 +18,8 @@ import java.util.List;
 
 public class Model extends SpatialNode implements IDestroyable {
 
-    public Model(String name) {
-        this.name = name;
-    }
-
-    private String name;
     private List<Mesh> meshes = new ArrayList<>();
     private MaterialManager materials = new MaterialManager();
-
-    public String getName() {
-        return name;
-    }
 
     public void addMesh(Mesh mesh) {
         meshes.add(mesh);
@@ -38,7 +29,11 @@ public class Model extends SpatialNode implements IDestroyable {
         return meshes;
     }
 
-    private class IndexManager {
+    public MaterialManager getMaterials() {
+        return materials;
+    }
+
+    private static class IndexManager {
 
         private List<VertexAttributes> attributes = new LinkedList<>();
         private List<Integer> indices = new LinkedList<>();
@@ -104,7 +99,8 @@ public class Model extends SpatialNode implements IDestroyable {
 
     }
 
-    public void load(String file, IRenderer renderer) throws IOException {
+    public static Model load(String file, IRenderer renderer) throws IOException {
+        Model model = new Model();
         final IOBJParser objParser = new OBJParser();
         final IMTLParser mtlParser = new MTLParser();
 
@@ -115,7 +111,7 @@ public class Model extends SpatialNode implements IDestroyable {
             for (MTLMaterial material : library.getMaterials()) {
                 MTLColor diffuse = material.getDiffuseColor();
                 MTLColor specular = material.getSpecularColor();
-                materials.add(new Material(material.getName(), new Color(diffuse.r, diffuse.g, diffuse.b), new Color(specular.r, specular.g, specular.b), material.getSpecularExponent()));
+                model.getMaterials().add(new Material(material.getName(), new Color(diffuse.r, diffuse.g, diffuse.b), new Color(specular.r, specular.g, specular.b), material.getSpecularExponent()));
             }
         }
 
@@ -146,9 +142,10 @@ public class Model extends SpatialNode implements IDestroyable {
                 FloatBuffer vertexBuf = Buffer.createFloatBuffer(vertices);
                 FloatBuffer normalBuff = Buffer.createFloatBuffer(normals);
                 // TODO: get texture coordinates
-                addMesh(new RawMesh(vertexBuf, normalBuff, indexBuf, indices.size(), materials.get(mesh.getMaterialName()), renderer));
+                model.addMesh(new RawMesh(vertexBuf, normalBuff, indexBuf, indices.size(), model.getMaterials().get(mesh.getMaterialName()), renderer));
             }
         }
+        return model;
     }
 
     @Override
@@ -156,7 +153,7 @@ public class Model extends SpatialNode implements IDestroyable {
         for (Mesh mesh : meshes) {
             mesh.destroy();
         }
-        materials.destroy();
+        getMaterials().destroy();
     }
 
     @Override

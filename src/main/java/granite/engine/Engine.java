@@ -7,7 +7,6 @@ import granite.engine.entities.Light;
 import granite.engine.entities.Scene;
 import granite.engine.input.Input;
 import granite.engine.model.Color;
-import granite.engine.model.ModelManager;
 import granite.engine.rendering.MasterRenderer;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -23,7 +22,6 @@ public class Engine {
     private Input input;
     private MasterRenderer renderer;
     private Scene scene;
-    private ModelManager modelManager;
     private IGame game;
 
     public Engine(IGame game) {
@@ -34,7 +32,6 @@ public class Engine {
 
         timeManager = new TimeManager(50);
         displayManager = new DisplayManager("GRANITE", 800, 600, false);
-        modelManager = new ModelManager();
         input = new Input();
         renderer = new MasterRenderer();
 
@@ -52,7 +49,6 @@ public class Engine {
         getTimeManager().attach(this);
         getDisplayManager().attach(this);
         getInput().attach(this);
-        getModelManager().attach(this);
         getRenderer().attach(this);
         getScene().attach(this);
         game.attach(this);
@@ -60,7 +56,6 @@ public class Engine {
         while (!getDisplayManager().isCloseRequested()) {
             getTimeManager().update(this);
             getDisplayManager().update(this);
-            getModelManager().update(this);
             getScene().update(this);
             getRenderer().update(this);
             game.update(this);
@@ -75,7 +70,6 @@ public class Engine {
         getRenderer().destroy();
         getScene().destroy();
         getInput().destroy();
-        getModelManager().destroy();
         getDisplayManager().destroy();
         getTimeManager().destroy();
         game.destroy();
@@ -97,10 +91,6 @@ public class Engine {
 
     public MasterRenderer getRenderer() {
         return renderer;
-    }
-
-    public ModelManager getModelManager() {
-        return modelManager;
     }
 
     public Scene getScene() {
