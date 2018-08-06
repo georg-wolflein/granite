@@ -5,7 +5,7 @@ import granite.engine.core.Constants;
 import granite.engine.core.IEngineObject;
 import granite.engine.model.Mesh;
 import granite.engine.model.Model;
-import granite.engine.util.MathUtil;
+import granite.engine.util.math.MathUtil;
 import org.joml.Matrix4f;
 
 import java.util.ArrayList;

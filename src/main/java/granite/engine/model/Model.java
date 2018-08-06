@@ -5,8 +5,8 @@ import granite.engine.core.IDestroyable;
 import granite.engine.entities.SpatialNode;
 import granite.engine.rendering.IRenderer;
 import granite.engine.util.Buffer;
-import granite.engine.util.Resource;
-import granite.engine.util.ResourceType;
+import granite.engine.util.resources.Resource;
+import granite.engine.util.resources.ResourceType;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;

@@ -2,8 +2,8 @@
 //
 //import granite.engine.core.IBindable;
 //import granite.engine.core.IDestroyable;
-//import granite.engine.util.Resource;
-//import granite.engine.util.ResourceType;
+//import granite.engine.util.resources.Resource;
+//import granite.engine.util.resources.ResourceType;
 //import org.lwjgl.*;
 //
 //import javax.imageio.ImageIO;

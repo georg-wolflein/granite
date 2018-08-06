@@ -3,7 +3,7 @@ package granite.engine.shaders;
 import granite.engine.entities.Camera;
 import granite.engine.entities.Light;
 import granite.engine.model.Color;
-import granite.engine.util.MathUtil;
+import granite.engine.util.math.MathUtil;
 import org.joml.Matrix4f;
 
 public abstract class Shader3D extends Shader {

@@ -3,7 +3,7 @@ package granite.engine.entities;
 import granite.engine.tree.INode;
 import granite.engine.tree.Node;
 import granite.engine.util.CachedValue;
-import granite.engine.util.MathUtil;
+import granite.engine.util.math.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 

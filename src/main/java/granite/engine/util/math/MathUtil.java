@@ -1,4 +1,4 @@
-package granite.engine.util;
+package granite.engine.util.math;
 
 import granite.engine.entities.Camera;
 import org.joml.Matrix4f;
