@@ -40,4 +40,8 @@ public class MathUtil {
         pos.m32(-pos.m32());
         return pos;
     }
+
+    public static Vector3f getPositionFromTransformationMatrix(Matrix4f matrix) {
+        return new Vector3f(matrix.m30(), matrix.m31(), matrix.m32());
+    }
 }

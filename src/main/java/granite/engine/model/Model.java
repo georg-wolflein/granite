@@ -2,7 +2,7 @@ package granite.engine.model;
 
 import com.mokiat.data.front.parser.*;
 import granite.engine.core.IDestroyable;
-import granite.engine.entities.Entity;
+import granite.engine.entities.SpatialNode;
 import granite.engine.rendering.IRenderer;
 import granite.engine.util.Buffer;
 import granite.engine.util.Resource;
@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Model extends Entity implements IDestroyable {
+public class Model extends SpatialNode implements IDestroyable {
 
     public Model(String name) {
         this.name = name;
@@ -160,22 +160,22 @@ public class Model extends Entity implements IDestroyable {
     }
 
     @Override
-    public void addChild(Entity child) {
+    public void addChild(SpatialNode child) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeChild(Entity child) {
+    public void removeChild(SpatialNode child) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void addDescendants(Collection<Entity> descendants) {
+    public void addDescendants(Collection<SpatialNode> descendants) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeDescendants(Collection<Entity> descendants) {
+    public void removeDescendants(Collection<SpatialNode> descendants) {
         throw new UnsupportedOperationException();
     }
 }

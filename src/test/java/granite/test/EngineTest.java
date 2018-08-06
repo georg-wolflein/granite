@@ -37,7 +37,7 @@ public class EngineTest {
                     Model model = engine.getModelManager().load("cubes", "cubes.obj", engine.getRenderer().getEntityRenderer());
                     entity1 = new Entity();
                     entity1.addChild(model);
-                    engine.getCamera().move(new Vector3f(0, 0, 10));
+                    engine.getScene().getCamera().move(new Vector3f(0, 0, 10));
                     engine.getScene().addChild(entity1);
 //                for (int i = 0; i < 100; i++) {
 //                    engine.getRenderer().getEntityRenderer().getEntityManager().addEntity(model, new Vector3f(ThreadLocalRandom.current().nextInt(-100, 100), ThreadLocalRandom.current().nextInt(-100, 100), ThreadLocalRandom.current().nextInt(-100, 100)), new Vector3f(0, 0, 0), 1);
@@ -50,7 +50,7 @@ public class EngineTest {
             @Override
             public void update(Engine engine) {
                 Input input = engine.getInput();
-                Camera camera = engine.getCamera();
+                Camera camera = engine.getScene().getCamera();
                 float x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0;
                 if (input.isPressed(GLFW_KEY_W)) {
                     z = -.2f;

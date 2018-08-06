@@ -6,13 +6,15 @@ import granite.engine.entities.Camera;
 import granite.engine.entities.Light;
 import granite.engine.entities.Scene;
 import granite.engine.input.Input;
+import granite.engine.model.Color;
 import granite.engine.model.ModelManager;
 import granite.engine.rendering.MasterRenderer;
 import org.joml.Vector3f;
-import org.lwjgl.glfw.*;
+import org.lwjgl.glfw.GLFWErrorCallback;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.glEnable;
 
 public class Engine {
 
@@ -22,8 +24,6 @@ public class Engine {
     private MasterRenderer renderer;
     private Scene scene;
     private ModelManager modelManager;
-    private Camera camera;
-    private Light light;
     private IGame game;
 
     public Engine(IGame game) {
@@ -37,9 +37,13 @@ public class Engine {
         modelManager = new ModelManager();
         input = new Input();
         renderer = new MasterRenderer();
+
         scene = new Scene();
-        camera = new Camera();
-        light = new Light(new Vector3f(15, 0, 20), new Vector3f(1, 1, 1));
+        scene.setCamera(new Camera());
+        Light light = new Light(new Color(1, 1, 1));
+        light.move(new Vector3f(15, 0, 20));
+        scene.setLight(light);
+
         this.game = game;
         glEnable(GL_DEPTH_TEST);
     }
@@ -50,8 +54,6 @@ public class Engine {
         getInput().attach(this);
         getModelManager().attach(this);
         getRenderer().attach(this);
-        getCamera().attach(this);
-        getLight().attach(this);
         getScene().attach(this);
         game.attach(this);
 
@@ -59,8 +61,6 @@ public class Engine {
             getTimeManager().update(this);
             getDisplayManager().update(this);
             getModelManager().update(this);
-            getCamera().update(this);
-            getLight().update(this);
             getScene().update(this);
             getRenderer().update(this);
             game.update(this);
@@ -73,8 +73,6 @@ public class Engine {
 
     public void destroy() {
         getRenderer().destroy();
-        getCamera().destroy();
-        getLight().destroy();
         getScene().destroy();
         getInput().destroy();
         getModelManager().destroy();
@@ -103,14 +101,6 @@ public class Engine {
 
     public ModelManager getModelManager() {
         return modelManager;
-    }
-
-    public Camera getCamera() {
-        return camera;
-    }
-
-    public Light getLight() {
-        return light;
     }
 
     public Scene getScene() {

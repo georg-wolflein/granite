@@ -40,8 +40,8 @@ public abstract class Shader3D extends Shader {
     }
 
     public void loadLight(Light light) {
-        super.loadVector("lightColor", light.getColor());
-        super.loadVector("lightPosition", light.getPosition());
+        super.loadVector("lightColor", light.getColor().getVector());
+        super.loadVector("lightPosition", light.getAbsolutePosition());
     }
 
 }

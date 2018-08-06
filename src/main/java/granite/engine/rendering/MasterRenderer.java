@@ -56,7 +56,7 @@ public class MasterRenderer implements IEngineObject {
         for (Map.Entry<IRenderer, Map<Mesh, Collection<Model>>> entry : engine.getScene().getRenderableMeshesMap().entrySet()) {
             IRenderer renderer = entry.getKey();
             for (Map.Entry<Mesh, Collection<Model>> renderEntry : entry.getValue().entrySet()) {
-                renderer.renderBatch(renderEntry.getKey(), renderEntry.getValue(), engine.getCamera(), engine.getLight());
+                renderer.renderBatch(renderEntry.getKey(), renderEntry.getValue(), engine.getScene().getCamera(), engine.getScene().getLight());
             }
         }
     }

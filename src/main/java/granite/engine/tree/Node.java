@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Node<T extends INode<T>> implements INode<T> {
+public abstract class Node<T extends INode<T>> implements INode<T> {
 
     private INode<T> parent = null;
     private Collection<T> children = new HashSet<>();
