@@ -34,11 +34,12 @@ public class EngineTest {
 //                entity1 = engine.getEntityManager().addEntity(model, new Vector3f(0, 0, -1), new Vector3f(0, 0, 0), 1);
 //                entity2 = engine.getEntityManager().addEntity(model, new Vector3f(0, 1, -1), new Vector3f(0, 1, 0), 1);
                 try {
-                    Model model = Model.load("cubes.obj", engine.getRenderer().getEntityRenderer());
+                    Model model = Model.load("dot.obj", engine.getRenderer().getEntityRenderer());
                     entity1 = new Entity();
                     entity1.addChild(model);
                     engine.getScene().getCamera().move(new Vector3f(0, 0, 10));
                     engine.getScene().addChild(entity1);
+                    new Globe(engine);
 //                for (int i = 0; i < 100; i++) {
 //                    engine.getRenderer().getEntityRenderer().getEntityManager().addEntity(model, new Vector3f(ThreadLocalRandom.current().nextInt(-100, 100), ThreadLocalRandom.current().nextInt(-100, 100), ThreadLocalRandom.current().nextInt(-100, 100)), new Vector3f(0, 0, 0), 1);
 //                }
