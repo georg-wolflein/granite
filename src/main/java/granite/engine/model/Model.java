@@ -21,6 +21,13 @@ public class Model extends SpatialNode implements IDestroyable {
     private List<Mesh> meshes = new ArrayList<>();
     private MaterialManager materials = new MaterialManager();
 
+    private Model() {
+    }
+
+    public Model(Model model) {
+        meshes.addAll(model.getMeshes());
+    }
+
     public void addMesh(Mesh mesh) {
         meshes.add(mesh);
     }

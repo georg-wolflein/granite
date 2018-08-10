@@ -4,6 +4,7 @@ import granite.engine.Engine;
 import granite.engine.entities.Entity;
 import granite.engine.model.Model;
 import granite.engine.util.math.PolarVector3f;
+import org.joml.Vector3f;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -11,10 +12,21 @@ import java.util.List;
 
 public class Globe extends Entity {
 
+    private class Face {
+        private Vector3f x1, x2, y1, y2;
+
+        public Face(Vector3f x1, Vector3f x2, Vector3f y1, Vector3f y2) {
+            this.x1 = x1;
+            this.x2 = x2;
+            this.y1 = y1;
+            this.y2 = y2;
+        }
+    }
+
     public Globe(Engine engine) {
         float r = 10;
-        int segments = 100;
-        int slices = 100;
+        int segments = 50;
+        int slices = 50;
         List<PolarVector3f> points = new LinkedList<>();
 
         for (int segment = 0; segment < segments; segment++) {
